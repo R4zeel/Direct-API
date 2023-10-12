@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <form>
+    <table>
+      {{ form }}
+    </table>
+    <input type="submit" value="Send">
+  </form>
+  {% with data=request.GET %}
+    <h2>Insert campaign name</h2>
+    {% if form.is_valid %}
+      <h2>Campaign {{ data.campaign_name }} created.</h2>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

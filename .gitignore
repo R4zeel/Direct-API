@@ -4,7 +4,9 @@ __pycache__/
 .venv
 venv/
 
-auth_info.py
+YandexDirect_API_Tool/create_campaign/auth_info.py
+YandexDirect_API_Tool/auth_info.py
+get_info.py
 
 json/
 

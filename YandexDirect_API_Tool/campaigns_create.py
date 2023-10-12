@@ -188,26 +188,3 @@ class CreateHtmlCreatives:
             ad_id = create_json_object(ads_url, body)
             print(f'Объявление {ad_id} создано')
 
-
-test_campaign = CreateCampaign(
-    'TestCampaign111',
-    60,
-    5000,
-    '2023-12-01',
-    '2023-12-05',
-    7,
-    30,
-)
-
-test_campaign.create_campaign()
-
-test_ad_group = CreateAdGroup(
-    test_campaign.campaign_id,
-    0
-)
-
-test_ad_group.create_ad_group()
-
-test_creatives = CreateHtmlCreatives(test_ad_group.ad_group_id, 'Dis18-soap')
-test_creatives.get_creatives()
-test_creatives.create_creatives()
