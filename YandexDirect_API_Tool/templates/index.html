@@ -8,35 +8,19 @@
 </head>
 <body>
 <div class="container pt-5">
-
-{#Bootstrap forms doesn't work with formsets for some reason, try to fix later#}
-{#  <div class="input-group">#}
-{#    {% for form in formset %}#}
-{#        <form>#}
-{#          {% bootstrap_form form %}#}
-{#          {% bootstrap_button button_type='submit' content='Send' %}#}
-{#        </form>#}
-{#    {% endfor %}#}
-{#  </div>#}
-
-  <div class="input-group">
+  <div>
     <form>
-      {% for form in formset %}
-        <table>
-          {{ form }}
-        </table>
-        <hr>
-        <hr>
-      {% endfor %}
-      <input type="submit" value="Send">
+      {% bootstrap_formset formset %}
+      {% bootstrap_button button_type='submit' content='Send' %}
     </form>
   </div>
   {% with data=request.GET %}
     <h2>Insert campaign settings</h2>
     {% if formset.is_valid %}
       {% for form in formset %}
-      <h1>Valid</h1>
-      <h2>Campaign {{ form.campaign_name }} created.</h2>
+      <h2>
+        Campaign {{ form.cleaned_data.campaign_name }} created.
+      </h2>
       {% endfor %}
     {% endif %}
   {% endwith %}
