@@ -9,12 +9,13 @@
 <body>
 <div class="container pt-5">
   <div>
-    <form>
+    <form method="POST">
+      {% csrf_token %}
       {% bootstrap_formset formset %}
       {% bootstrap_button button_type='submit' content='Send' %}
     </form>
   </div>
-  {% with data=request.GET %}
+  {% with data=request.POST %}
     <h2>Insert campaign settings</h2>
     {% if formset.is_valid %}
       {% for form in formset %}

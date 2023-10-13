@@ -8,8 +8,8 @@ import campaigns_create
 
 def index(request):
     template = 'index.html'
-    campaigns_formset = formset_factory(CampaignSettingsForm, extra=2)
-    formset = campaigns_formset(request.GET or None)
+    campaigns_formset = formset_factory(CampaignSettingsForm)
+    formset = campaigns_formset(request.POST or None)
     if formset.is_valid():
         for form in formset:
             campaign_id = campaigns_create.CreateCampaign(
