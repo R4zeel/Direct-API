@@ -1,21 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Direct API campaigns</title>
+  {% load django_bootstrap5 %}
+  {% bootstrap_css %}
 </head>
 <body>
-  <form>
-    <table>
-      {{ form }}
-    </table>
-    <input type="submit" value="Send">
-  </form>
+<div class="container pt-5">
+
+{#Bootstrap forms doesn't work with formsets for some reason, try to fix later#}
+{#  <div class="input-group">#}
+{#    {% for form in formset %}#}
+{#        <form>#}
+{#          {% bootstrap_form form %}#}
+{#          {% bootstrap_button button_type='submit' content='Send' %}#}
+{#        </form>#}
+{#    {% endfor %}#}
+{#  </div>#}
+
+  <div class="input-group">
+    <form>
+      {% for form in formset %}
+        <table>
+          {{ form }}
+        </table>
+        <hr>
+        <hr>
+      {% endfor %}
+      <input type="submit" value="Send">
+    </form>
+  </div>
   {% with data=request.GET %}
-    <h2>Insert campaign name</h2>
-    {% if form.is_valid %}
-      <h2>Campaign {{ data.campaign_name }} created.</h2>
+    <h2>Insert campaign settings</h2>
+    {% if formset.is_valid %}
+      {% for form in formset %}
+      <h1>Valid</h1>
+      <h2>Campaign {{ form.campaign_name }} created.</h2>
+      {% endfor %}
     {% endif %}
   {% endwith %}
+  </div>
 </body>
 </html>
