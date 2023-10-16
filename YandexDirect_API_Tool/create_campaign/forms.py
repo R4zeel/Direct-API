@@ -3,13 +3,13 @@ from django import forms
 
 class CampaignSettingsForm(forms.Form):
     campaign_name = forms.CharField(label='Название РК')
-    total_budget = forms.IntegerField(min_value=1000, label='Бюджет')
     cpm = forms.IntegerField(min_value=20, label='Ставка')
-    date_start = forms.DateField(
+    total_budget = forms.IntegerField(min_value=1000, label='Бюджет')
+    date_start = forms.CharField(
         label='Дата старта',
         widget=forms.DateInput(attrs={'type': 'date'})
     )
-    date_end = forms.DateField(
+    date_end = forms.CharField(
         label='Дата завершения',
         widget=forms.DateInput(attrs={'type': 'date'})
     )
