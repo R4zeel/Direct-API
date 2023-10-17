@@ -1,5 +1,5 @@
 """
-ASGI config for YandexDirect_API_Tool project.
+ASGI config for yandex_direct_api_tool project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'YandexDirect_API_Tool.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yandex_direct_api_tool.settings')
 
 application = get_asgi_application()

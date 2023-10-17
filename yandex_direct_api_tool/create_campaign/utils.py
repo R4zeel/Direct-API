@@ -188,3 +188,40 @@ class CreateHtmlCreatives:
             ad_id = create_json_object(ads_url, body)
             print(f'Объявление {ad_id} создано')
 
+# def add_video():
+#     {
+#         "method": "add",
+#         "params": { / * required * /
+#                   "AdVideos": [{ / * AdVideoAddItem * /
+#                                "Url": (string),
+#     "VideoData": (base64Binary),
+#     "Name": (string)
+#     }, ..]
+#     }
+#     }
+#     ...
+#
+# def create_video_creative():
+#     "params" : { /* required */
+#         "Creatives" : [{ /* required */
+#             "VideoExtensionCreative" : { /* required */
+#                 "VideoId" : (string) /* required */
+#             }
+#         }, ... ]
+#     }
+#     ...
+#
+# def create_video_ad():
+#     "CpmVideoAdBuilderAd": { / * CpmVideoAdBuilderAdAdd * /
+#                            "Creative": { / * AdBuilderAdAddItem * /
+#                                        "CreativeId": (long) / * required * /
+#     }, / *required * /
+#           "Href": (string),
+#     "TrackingPixels": { / * ArrayOfString * /
+#                       "Items": [(string), ...] / * required * /
+#     },
+#     "TurboPageId": (long)
+#     },
+#     ...
+#
+# adgroupvariants = [CpmBannerKeywordsAdGroupAdd, CpmVideoAdGroupAdd]

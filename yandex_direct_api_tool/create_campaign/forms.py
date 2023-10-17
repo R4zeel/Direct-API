@@ -1,6 +1,10 @@
 from django import forms
 
 
+class FormsCount(forms.Form):
+    count = forms.IntegerField(label='Количество кампаний')
+
+
 class CampaignSettingsForm(forms.Form):
     campaign_name = forms.CharField(label='Название РК')
     cpm = forms.IntegerField(min_value=20, label='Ставка')
@@ -15,4 +19,18 @@ class CampaignSettingsForm(forms.Form):
     )
     frequency_cap = forms.IntegerField(label='Частота')
     frequency_period = forms.IntegerField(label='Период частоты')
-    # # add rest of the settings here later
+
+
+class AdGroupSettingsForm(forms.Form):
+    region_choices = [
+        (0, 'RF'),
+        (1, 'Some Region')
+    ]
+    region_choice_field = forms.ChoiceField(
+        widget=forms.RadioSelect, choices=region_choices
+    )
+
+
+class CreativeSettings(forms.Form):
+    first_pixel = forms.CharField()
+    second_pixel = forms.CharField()

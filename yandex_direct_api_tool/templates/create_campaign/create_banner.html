@@ -3,6 +3,10 @@
 
 {% block content %}
   <div>
+  <form>
+  {{ count }}
+    {% bootstrap_button button_type='submit' content='OK' %}
+  </form>
     <form method="POST">
       {% csrf_token %}
       {{ formset.management_form }}

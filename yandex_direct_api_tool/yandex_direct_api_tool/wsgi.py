@@ -1,5 +1,5 @@
 """
-WSGI config for YandexDirect_API_Tool project.
+WSGI config for yandex_direct_api_tool project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'YandexDirect_API_Tool.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yandex_direct_api_tool.settings')
 
 application = get_wsgi_application()

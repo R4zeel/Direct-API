@@ -1,5 +1,5 @@
 """
-URL configuration for YandexDirect_API_Tool project.
+URL configuration for yandex_direct_api_tool project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/

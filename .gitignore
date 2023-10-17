@@ -1,11 +1,14 @@
+__init__.py
+yandex_direct_api_tool/__init__.py
 .Python
 __pycache__/
+
 
 .venv
 venv/
 
-YandexDirect_API_Tool/create_campaign/auth_info.py
-YandexDirect_API_Tool/auth_info.py
+yandex_direct_api_tool/auth_info.py
+auth_info.py
 get_info.py
 
 json/
