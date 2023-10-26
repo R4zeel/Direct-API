@@ -31,8 +31,6 @@ class AdGroupSettingsForm(forms.Form):
     region_choice_field = forms.ChoiceField(
         widget=forms.RadioSelect, choices=region_choices
     )
-
-
-class CreativeSettings(forms.Form):
+    creative_name = forms.CharField(label='Название группы креативов', required=False)
     first_pixel = forms.CharField(required=False)
     second_pixel = forms.CharField(required=False)
