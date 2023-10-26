@@ -5,6 +5,10 @@ class FormsCount(forms.Form):
     count = forms.IntegerField(label='Количество кампаний')
 
 
+class AdGroupsCount(forms.Form):
+    count = forms.IntegerField(label='Количество групп')
+
+
 class CampaignSettingsForm(forms.Form):
     campaign_name = forms.CharField(label='Название РК')
     cpm = forms.IntegerField(min_value=20, label='Ставка')
@@ -19,6 +23,7 @@ class CampaignSettingsForm(forms.Form):
     )
     frequency_cap = forms.IntegerField(label='Частота')
     frequency_period = forms.IntegerField(label='Период частоты')
+    ad_group_count = forms.IntegerField(label='Количество групп объявлений')
 
 
 class AdGroupSettingsForm(forms.Form):
@@ -26,11 +31,12 @@ class AdGroupSettingsForm(forms.Form):
         (0, 'RF'),
         (1, 'Some Region')
     ]
+    ad_group_name = forms.CharField(label='Название', max_length=50)
     region_choice_field = forms.ChoiceField(
         widget=forms.RadioSelect, choices=region_choices
     )
 
 
 class CreativeSettings(forms.Form):
-    first_pixel = forms.CharField()
-    second_pixel = forms.CharField()
+    first_pixel = forms.CharField(required=False)
+    second_pixel = forms.CharField(required=False)

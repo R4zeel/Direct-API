@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <form method='post'>
+    {{ formset.management_form }}
+    <div>
+      {% for form in formset %}
+        {% bootstrap_form form %}
+      {% endfor %}
+    </div>
+    {% bootstrap_button button_type='submit' content='Отправить' %}
+  </form>
+{% endblock %}

@@ -4,16 +4,17 @@
 {% block content %}
   <div>
   <form>
-  {{ count }}
+    {{ count }}
     {% bootstrap_button button_type='submit' content='OK' %}
   </form>
+  <a href='{% url 'create_campaign:ad_groups_create' %}'>ad groups</a>
     <form method="POST">
       {% csrf_token %}
       {{ formset.management_form }}
         {% for form in formset %}
           <hr>
           <label>Campaign settings</label><br>
-          <div class="input-group">
+          <div id="forms" class="input-group">
             {% bootstrap_form form %}
           </div>
         {% endfor %}
@@ -21,12 +22,15 @@
     </form>
   </div>
   {% with data=request.POST %}
-    {% if formset.is_valid %}
-      {% for form in formset %}
-      <h2>
-        Campaign {{ form.cleaned_data.campaign_name }} created.
-      </h2>
-      {% endfor %}
+    {% if data %}
+      {% if formset.is_valid %}
+      <a href='{% url 'create_campaign:ad_groups_create' %}'>ad groups</a>
+        {% for form in formset %}
+        <h2>
+          Campaign {{ form.cleaned_data.campaign_name }} created.
+        </h2>
+        {% endfor %}
+      {% endif %}
     {% endif %}
   {% endwith %}
 {% endblock %}
