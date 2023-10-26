@@ -5,10 +5,6 @@ class FormsCount(forms.Form):
     count = forms.IntegerField(label='Количество кампаний')
 
 
-class AdGroupsCount(forms.Form):
-    count = forms.IntegerField(label='Количество групп')
-
-
 class CampaignSettingsForm(forms.Form):
     campaign_name = forms.CharField(label='Название РК')
     cpm = forms.IntegerField(min_value=20, label='Ставка')

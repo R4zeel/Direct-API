@@ -5,7 +5,11 @@ from .forms import *
 
 from .utils import *
 
-campaigns_list = dict()
+campaigns_list = {
+    1: 1,
+    2: 3,
+    5: 3
+}
 
 
 def index(request):
@@ -29,7 +33,10 @@ def index(request):
 
 def ad_group_create(request):
     template = 'create_campaign/create_ad_group.html'
-    formset = (formset_factory(AdGroupSettingsForm, extra=1))(request.POST or None)
-    context = {'formset': formset}
+    formsets = []
+    for count in campaigns_list.values():
+        formset = (formset_factory(AdGroupSettingsForm, extra=count))(request.POST or None)
+        formsets.append(formset)
+    context = {'formsets': formsets}
     return render(request, template, context)
     
