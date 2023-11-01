@@ -5,11 +5,7 @@ from .forms import *
 
 from .utils import *
 
-campaigns_list = {
-    1: 1,
-    2: 3,
-    5: 3
-}
+campaigns_list = {}
 
 
 def index(request):

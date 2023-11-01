@@ -31,6 +31,7 @@ class CreateCampaign:
             end_date: str,
             frequency: int,
             frequency_period: int,
+            dump
     ):
         self.campaign_name = campaign_name
         self.cpm = cpm

@@ -7,7 +7,6 @@
     {{ count }}
     {% bootstrap_button button_type='submit' content='OK' %}
   </form>
-  <a href='{% url 'create_campaign:ad_groups_create' %}'>ad groups</a>
     <form method="POST">
       {% csrf_token %}
       {{ formset.management_form }}
