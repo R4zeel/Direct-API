@@ -1,6 +1,6 @@
 import json
 import requests
-import auth_info
+import yandex_direct_api_tool.auth_info as auth_info
 
 TOKEN = auth_info.TOKEN
 
@@ -17,7 +17,7 @@ headers = {
 body = {
     "method": "get",
     "params": {
-        "DictionaryNames": ["AudienceInterests"]
+        "DictionaryNames": ["AudienceDemographicProfiles"]
         # 'SelectionCriteria': {
         #     'CampaignIds': [98579490]
         # },

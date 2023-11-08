@@ -15,6 +15,13 @@ headers = {
 }
 
 
+def create_json_object(obj_url, body):
+    json_body = json.dumps(body, ensure_ascii=False).encode('utf8')
+    result = requests.post(obj_url, json_body, headers=headers)
+    print(result)
+    return result.json()['result']['AddResults'][0]['Id']
+
+
 class CreateCampaign:
     def __init__(
             self,
@@ -25,6 +32,7 @@ class CreateCampaign:
             end_date: str,
             frequency: int,
             frequency_period: int,
+            dump
     ):
         self.campaign_name = campaign_name
         self.cpm = cpm
@@ -76,15 +84,14 @@ class CreateCampaign:
                 "Campaigns": settings,
             }
         }
-
-        json_body = json.dumps(body, ensure_ascii=False).encode('utf8')
-        result = requests.post(campaigns_url, json_body, headers=headers)
-        print(result.json())
-        self.campaign_id = result.json()['result']['AddResults'][0]['Id']
+        self.campaign_id = create_json_object(campaigns_url, body)
+        print(f'Кампания создана. ID - {self.campaign_id}')
+        return self.campaign_id
 
 
 class CreateAdGroup:
-    def __init__(self, region_id):
+    def __init__(self, campaign_id, region_id):
+        self.campaign_id = campaign_id
         self.region_id = region_id
         self.ad_group_id = 0
 
@@ -93,7 +100,7 @@ class CreateAdGroup:
         settings = [
             {
                 "Name": 'TestInterests',
-                "CampaignId": 98747112,
+                "CampaignId": self.campaign_id,
                 "RegionIds": [self.region_id],
                 "CpmBannerUserProfileAdGroup": dict()
             }
@@ -104,32 +111,87 @@ class CreateAdGroup:
                 'AdGroups': settings,
             }
         }
-        json_body = json.dumps(body, ensure_ascii=False).encode('utf8')
-        result = requests.post(ad_groups_url, json_body, headers=headers)
-        print(result.json())
-        self.ad_group_id = result.json()['result']['AddResults'][0]['Id']
+        self.ad_group_id = create_json_object(ad_groups_url, body)
+        print(f'Группа объявлений создана. ID - {self.ad_group_id}')
+        return self.ad_group_id
+
+    def add_targetings(self):
+        body = {
+            "method": "add",
+            "params": {
+                "AudienceTargets": [
+                    {
+                        "AdGroupId": self.ad_group_id,
+                        "RetargetingListId": (long),
+                        "InterestId": (long),
+                        "ContextBid": (long),
+                        "StrategyPriority": ("LOW" | "NORMAL" | "HIGH")
+                    }
+                ]
+            }
+        }
+        ...
 
 
-def add_targetings():
-    ad_targ_url = 'https://api.direct.yandex.com/json/v5/audiencetargets'
-    body = {
-        "method": "add",
-        "params": {
-            "AudienceTargets": [
+class CreateHtmlCreatives:
+    def __init__(self, ad_group_id, creative_name=None):
+        self.creative_name = creative_name
+        self.ad_group_id = ad_group_id
+        self.creative_id = []
+
+    def get_creatives(self):
+        creatives_url = 'https://api.direct.yandex.com/json/v5/creatives'
+        creatives_body = {
+            "method": "get",
+            "params": {
+                "SelectionCriteria": {
+                    "Types": ["HTML5_CREATIVE"],
+                },
+                "FieldNames": [
+                    'Name',
+                    "Id",
+                    "Width",
+                    "Height"
+                ],
+            }
+        }
+        json_body = json.dumps(creatives_body, ensure_ascii=False).encode('utf8')
+        result = requests.post(creatives_url, json_body, headers=headers)
+        for creative_info in result.json()['result']['Creatives']:
+            if self.creative_name in creative_info['Name']:
+                self.creative_id.append(creative_info['Id'])
+
+    def create_creatives(self):
+        ads_url = 'https://api.direct.yandex.com/json/v5/ads'
+        # for id in self.creative_id:
+        add_settings = [
                 {
-                    "AdGroupId": 5293289501,
-                    "InterestId": 50,
+                    "AdGroupId": self.ad_group_id,
+                    "CpmBannerAdBuilderAd": {
+                        "Creative": {
+                            "CreativeId": 1129288450,
+                        },
+                        "Href": 'https://ya.ru',
+                        'TrackingPixels': {
+                            'Items': [
+                                'https://wcm.weborama-tech.ru/fcgi-bin/dispatch.fcgi?a.A=im&a.si=9312&a.te=11311&a.he=1&a.wi=1&a.hr=p&a.ra=%25aw_random%25',
+                                'https://pixel.adlooxtracking.ru/ads/ic.php?_=%25aw_random%25&type=pixel&plat=30&tag_id=238&client=weborama&id1=1081&id2=80&id3=&id4=&id5=11315&id6=0&id7=9312&id11=&id12=russia&id14=$ADLOOX_WEBSITE'
+                            ]
+                        }
+                    },
                 }
             ]
-        }
-    }
-    json_body = json.dumps(body, ensure_ascii=False).encode('utf8')
-    result = requests.post(ad_targ_url, json_body, headers=headers)
-    print(result.json())
-
-
-add_targetings()
-
+        body = {
+                "method": "add",
+                "params": {
+                    'Ads': add_settings
+                }
+            }
+        ad_id = create_json_object(ads_url, body)
+        print(f'Объявление {ad_id} создано')
+object = CreateHtmlCreatives(5308821799)
+object.create_creatives()
+print(object)
 # def add_video():
 #     {
 #         "method": "add",

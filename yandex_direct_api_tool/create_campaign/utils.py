@@ -188,7 +188,7 @@ class CreateHtmlCreatives:
             }
             ad_id = create_json_object(ads_url, body)
             print(f'Объявление {ad_id} создано')
-
+print('test')
 # def add_video():
 #     {
 #         "method": "add",

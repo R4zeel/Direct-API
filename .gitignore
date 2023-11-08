@@ -8,8 +8,9 @@ __pycache__/
 venv/
 
 yandex_direct_api_tool/auth_info.py
+utils_testing/auth_info.py
+utils_testing/campaigns_create.py
 auth_info.py
-get_info.py
 
 json/
 

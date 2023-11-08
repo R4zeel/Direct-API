@@ -27,6 +27,7 @@ def index(request):
         }
     return render(request, template, context)
 
+
 def ad_group_create(request):
     template = 'create_campaign/create_ad_group.html'
     formsets = []
