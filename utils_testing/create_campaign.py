@@ -32,7 +32,7 @@ class CreateCampaign:
             end_date: str,
             frequency: int,
             frequency_period: int,
-            dump
+            dump=None
     ):
         self.campaign_name = campaign_name
         self.cpm = cpm
@@ -116,30 +116,65 @@ class CreateAdGroup:
         return self.ad_group_id
 
     def add_targetings(self):
+        body = {"method": "add","params": {"AudienceTargets": [{"AdGroupId": self.ad_group_id,"RetargetingListId": (long),"InterestId": (long),"ContextBid": (long),"StrategyPriority": ("LOW" | "NORMAL" | "HIGH")}]}}
+        ...
+
+
+class CreateCreatives:
+    def __init__(self, ad_group_id, click_url, banner_name=None, pixel_one=None, pixel_two=None):
+        self.banner_name = banner_name
+        self.ad_group_id = ad_group_id
+        self.creative_id = []
+        self.click_url = click_url
+        self.pixel_one=pixel_one
+        self.pixel_two=pixel_two
+
+    def add_video():
         body = {
             "method": "add",
             "params": {
-                "AudienceTargets": [
+                "AdVideos": [
                     {
-                        "AdGroupId": self.ad_group_id,
-                        "RetargetingListId": (long),
-                        "InterestId": (long),
-                        "ContextBid": (long),
-                        "StrategyPriority": ("LOW" | "NORMAL" | "HIGH")
+                        "VideoData": None,
+                        "Name": str()
                     }
                 ]
             }
         }
         ...
 
+    def create_video_creative():
+        body = {
+            "params" : {
+                "Creatives" : [
+                    {
+                        "VideoExtensionCreative" : {
+                            "VideoId" : str()
+                        }
+                    }
+                ]
+            }
+        }
+        ...
 
-class CreateHtmlCreatives:
-    def __init__(self, ad_group_id, creative_name=None):
-        self.creative_name = creative_name
-        self.ad_group_id = ad_group_id
-        self.creative_id = []
+    def create_video_ad(self):
+        body = {
+            "CpmVideoAdBuilderAd": {
+                "Creative": {
+                    "CreativeId": int()
+                },
+                "Href": self.click_url,
+                "TrackingPixels": {
+                    "Items": [
+                        self.pixel_one, 
+                        self.pixel_two
+                    ]
+                }
+            }
+        }
+        ...
 
-    def get_creatives(self):
+    def get_banners(self):
         creatives_url = 'https://api.direct.yandex.com/json/v5/creatives'
         creatives_body = {
             "method": "get",
@@ -158,74 +193,40 @@ class CreateHtmlCreatives:
         json_body = json.dumps(creatives_body, ensure_ascii=False).encode('utf8')
         result = requests.post(creatives_url, json_body, headers=headers)
         for creative_info in result.json()['result']['Creatives']:
-            if self.creative_name in creative_info['Name']:
+            if self.banner_name in creative_info['Name']:
                 self.creative_id.append(creative_info['Id'])
 
-    def create_creatives(self):
+    def create_banners(self):
         ads_url = 'https://api.direct.yandex.com/json/v5/ads'
-        # for id in self.creative_id:
-        add_settings = [
+        for id in self.creative_id:
+            add_settings = [
                 {
                     "AdGroupId": self.ad_group_id,
                     "CpmBannerAdBuilderAd": {
                         "Creative": {
-                            "CreativeId": 1129288450,
+                            "CreativeId": id,
                         },
-                        "Href": 'https://ya.ru',
+                        "Href": self.click_url,
                         'TrackingPixels': {
                             'Items': [
-                                'https://wcm.weborama-tech.ru/fcgi-bin/dispatch.fcgi?a.A=im&a.si=9312&a.te=11311&a.he=1&a.wi=1&a.hr=p&a.ra=%25aw_random%25',
-                                'https://pixel.adlooxtracking.ru/ads/ic.php?_=%25aw_random%25&type=pixel&plat=30&tag_id=238&client=weborama&id1=1081&id2=80&id3=&id4=&id5=11315&id6=0&id7=9312&id11=&id12=russia&id14=$ADLOOX_WEBSITE'
+                                self.pixel_one,
+                                self.pixel_two
                             ]
                         }
                     },
                 }
             ]
-        body = {
+            body = {
                 "method": "add",
                 "params": {
                     'Ads': add_settings
                 }
             }
-        ad_id = create_json_object(ads_url, body)
-        print(f'Объявление {ad_id} создано')
-object = CreateHtmlCreatives(5308821799)
+            ad_id = create_json_object(ads_url, body)
+            print(f'Объявление {ad_id} создано')
+
+object = CreateCreatives(5308821799)
 object.create_creatives()
 print(object)
-# def add_video():
-#     {
-#         "method": "add",
-#         "params": { / * required * /
-#                   "AdVideos": [{ / * AdVideoAddItem * /
-#                                "Url": (string),
-#     "VideoData": (base64Binary),
-#     "Name": (string)
-#     }, ..]
-#     }
-#     }
-#     ...
-#
-# def create_video_creative():
-#     "params" : { /* required */
-#         "Creatives" : [{ /* required */
-#             "VideoExtensionCreative" : { /* required */
-#                 "VideoId" : (string) /* required */
-#             }
-#         }, ... ]
-#     }
-#     ...
-#
-# def create_video_ad():
-#     "CpmVideoAdBuilderAd": { / * CpmVideoAdBuilderAdAdd * /
-#                            "Creative": { / * AdBuilderAdAddItem * /
-#                                        "CreativeId": (long) / * required * /
-#     }, / *required * /
-#           "Href": (string),
-#     "TrackingPixels": { / * ArrayOfString * /
-#                       "Items": [(string), ...] / * required * /
-#     },
-#     "TurboPageId": (long)
-#     },
-#     ...
-#
+
 # adgroupvariants = [CpmBannerKeywordsAdGroupAdd, CpmVideoAdGroupAdd]
