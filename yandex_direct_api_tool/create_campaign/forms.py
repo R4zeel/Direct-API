@@ -19,7 +19,9 @@ class CampaignSettingsForm(forms.Form):
     )
     frequency_cap = forms.IntegerField(label='Частота')
     frequency_period = forms.IntegerField(label='Период частоты')
-    ad_group_count = forms.IntegerField(label='Количество групп объявлений')
+    ad_group_count = forms.IntegerField(
+        label='Количество групп объявлений'
+        )
 
 
 class AdGroupSettingsForm(forms.Form):
@@ -29,8 +31,14 @@ class AdGroupSettingsForm(forms.Form):
     ]
     ad_group_name = forms.CharField(label='Название', max_length=50)
     region_choice_field = forms.ChoiceField(
-        widget=forms.RadioSelect, choices=region_choices
+        widget=forms.RadioSelect, 
+        choices=region_choices, label='Гео'
     )
-    creative_name = forms.CharField(label='Название группы креативов', required=False)
+    creative_name = forms.CharField(
+        label='Название группы креативов | ', 
+        required=False
+        )
+    video = forms.ImageField(label='Контент', required=False)
+    click_url = forms.CharField(required=False)
     first_pixel = forms.CharField(required=False)
     second_pixel = forms.CharField(required=False)

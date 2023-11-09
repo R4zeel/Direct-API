@@ -8,6 +8,16 @@ TOKEN = auth_info.TOKEN
 
 CLIENT_LOGIN = auth_info.CLIENT_LOGIN
 
+CAMPAIGNS_URL = 'https://api.direct.yandex.com/json/v5/campaigns'
+AD_GROUPS_URL = 'https://api.direct.yandex.com/json/v5/adgroups'
+CREATIVES_URL = 'https://api.direct.yandex.com/json/v5/creatives'
+ADS_URL = 'https://api.direct.yandex.com/json/v5/ads'
+
+# AD_GROUP_OPTIONS = [
+# CpmBannerKeywordsAdGroupAdd, 
+# CpmVideoAdGroupAdd
+# ]
+
 headers = {
     "Authorization": "Bearer " + TOKEN,
     "Client-Login": CLIENT_LOGIN,
@@ -44,7 +54,6 @@ class CreateCampaign:
         self.campaign_id = 0
 
     def create_campaign(self):
-        campaigns_url = 'https://api.direct.yandex.com/json/v5/campaigns'
         settings = [
             {
                 "Name": self.campaign_name,
@@ -84,7 +93,7 @@ class CreateCampaign:
                 "Campaigns": settings,
             }
         }
-        self.campaign_id = create_json_object(campaigns_url, body)
+        self.campaign_id = create_json_object(CAMPAIGNS_URL, body)
         print(f'Кампания создана. ID - {self.campaign_id}')
         return self.campaign_id
 
@@ -96,7 +105,6 @@ class CreateAdGroup:
         self.ad_group_id = 0
 
     def create_ad_group(self):
-        ad_groups_url = 'https://api.direct.yandex.com/json/v5/adgroups'
         settings = [
             {
                 "Name": 'TestInterests',
@@ -111,17 +119,38 @@ class CreateAdGroup:
                 'AdGroups': settings,
             }
         }
-        self.ad_group_id = create_json_object(ad_groups_url, body)
+        self.ad_group_id = create_json_object(AD_GROUPS_URL, body)
         print(f'Группа объявлений создана. ID - {self.ad_group_id}')
         return self.ad_group_id
-
-    def add_targetings(self):
-        body = {"method": "add","params": {"AudienceTargets": [{"AdGroupId": self.ad_group_id,"RetargetingListId": (long),"InterestId": (long),"ContextBid": (long),"StrategyPriority": ("LOW" | "NORMAL" | "HIGH")}]}}
-        ...
+    
+    # currently not supported by API
+    # def add_targetings(self):
+    #     body = {
+    #         "method": "add",
+    #         "params": {
+    #             "AudienceTargets": [
+    #                 {
+    #                     "AdGroupId": self.ad_group_id,
+    #                     "RetargetingListId": (long),
+    #                     "InterestId": (long),
+    #                     "ContextBid": (long),
+    #                     "StrategyPriority": ("LOW" | "NORMAL" | "HIGH")
+    #                 }
+    #             ]
+    #         }
+    #     }
+    #     ...
 
 
 class CreateCreatives:
-    def __init__(self, ad_group_id, click_url, banner_name=None, pixel_one=None, pixel_two=None):
+    def __init__(
+            self, 
+            ad_group_id, 
+            click_url, 
+            banner_name=None, 
+            pixel_one=None, 
+            pixel_two=None
+            ):
         self.banner_name = banner_name
         self.ad_group_id = ad_group_id
         self.creative_id = []
@@ -132,28 +161,17 @@ class CreateCreatives:
     def add_video():
         body = {
             "method": "add",
-            "params": {
-                "AdVideos": [
-                    {
-                        "VideoData": None,
-                        "Name": str()
-                    }
-                ]
-            }
+            "params": {"AdVideos": [
+                    {"VideoData": None, "Name": str()}
+            ]}
         }
         ...
 
     def create_video_creative():
         body = {
-            "params" : {
-                "Creatives" : [
-                    {
-                        "VideoExtensionCreative" : {
-                            "VideoId" : str()
-                        }
-                    }
-                ]
-            }
+            "params" : {"Creatives" : [
+                    {"VideoExtensionCreative" : {"VideoId" : str()}}
+                ]}
         }
         ...
 
@@ -175,7 +193,6 @@ class CreateCreatives:
         ...
 
     def get_banners(self):
-        creatives_url = 'https://api.direct.yandex.com/json/v5/creatives'
         creatives_body = {
             "method": "get",
             "params": {
@@ -190,14 +207,20 @@ class CreateCreatives:
                 ],
             }
         }
-        json_body = json.dumps(creatives_body, ensure_ascii=False).encode('utf8')
-        result = requests.post(creatives_url, json_body, headers=headers)
+        json_body = json.dumps(
+            creatives_body, 
+            ensure_ascii=False
+            ).encode('utf8')
+        result = requests.post(
+            CREATIVES_URL, 
+            json_body, 
+            headers=headers
+            )
         for creative_info in result.json()['result']['Creatives']:
             if self.banner_name in creative_info['Name']:
                 self.creative_id.append(creative_info['Id'])
 
     def create_banners(self):
-        ads_url = 'https://api.direct.yandex.com/json/v5/ads'
         for id in self.creative_id:
             add_settings = [
                 {
@@ -222,11 +245,8 @@ class CreateCreatives:
                     'Ads': add_settings
                 }
             }
-            ad_id = create_json_object(ads_url, body)
+            ad_id = create_json_object(ADS_URL, body)
             print(f'Объявление {ad_id} создано')
 
-object = CreateCreatives(5308821799)
-object.create_creatives()
-print(object)
 
-# adgroupvariants = [CpmBannerKeywordsAdGroupAdd, CpmVideoAdGroupAdd]
+
